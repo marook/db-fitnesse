@@ -1,0 +1,58 @@
+db-fitnesse
+
+1) Limitations
+2) Installation
+3) Example Fitnesse Wiki Page
+
+--------------------------------------------------------------------------
+Limitations
+
+Right now only the JDBC oracle thin driver is supported.
+
+--------------------------------------------------------------------------
+Installation
+
+1) Download the Xebium Fitnesse server at
+http://xebia.github.com/Xebium/
+(I've only tested it with Xebium yet... maybe it works with plain Fitnesse too?!?)
+
+2) Install db-fitnesse to your local maven repository
+$ cd db-fitnesse
+$ mvn clean install
+
+3) Add db-fitnesse dependency to the Xebium server
+Open the Xebium/pom.xml and add the following dependency:
+    <dependency>
+      <groupId>com.github.marook</groupId>
+      <artifactId>db-fitnesse</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
+      <scope>runtime</scope>
+    </dependency>
+
+4) Add the oracle JDBC thin driver the the Xebium server
+Open the Xebium/pom.xml and add the following dependency:
+<dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc</artifactId>
+      <version>1.4</version>
+      <scope>system</scope>
+      <systemPath>C:\path\to\my\ojdbc14.jar</systemPath>
+    </dependency>
+    
+--------------------------------------------------------------------------
+Example Fitnesse Wiki Page
+
+!contents -R2 -h -g
+
+!*****> '''Classpath'''
+!pomFile pom.xml@system
+*****!
+
+|com.github.marook.db_fitnesse.ConfigFixture                     |
+|databaseUrl                             |user  |password|commit?|
+|jdbc:oracle:thin:@<db host>:<port>:<sid>|<user>|<pw>    |true   |
+
+|com.github.marook.db_fitnesse.TestFixture                                                                           |
+|sql                                                                                                       |rowcount?|
+|select count(1) as rowcount from EVENT where timestamp >= '1330415251430' and timestamp <= '1330415255148'|23       |
+|select count(1) as rowcount from EVENT where timestamp <= '1330415255148'                                 |76627    |
